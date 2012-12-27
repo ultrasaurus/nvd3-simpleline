@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>nvd3 experiment</title>
+    <link href="https://raw.github.com/novus/nvd3/master/src/nv.d3.css" rel="stylesheet"/>
+    <script type="text/javascript" src="https://raw.github.com/novus/nvd3/master/lib/d3.v2.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/novus/nvd3/master/nv.d3.min.js"></script>
+  </head>
+  <body>
+    
+<h1>nvd3 with date axis</h1>
+<p><a href="https://github.com/ultrasaurus/nvd3-simpleline/blob/master/date_axis.html">Source code</a>
+<div id="chart">
+  <svg style='height:500px'> </svg>
+</div>
+<script type="text/javascript"> 
+  nv.addGraph(function() {  
+   var chart = nv.models.lineChart();
+  
+  chart.xAxis
+       .axisLabel('Date')
+       .rotateLabels(-45)
+       .tickFormat(d3.time.format('%b %d')) ;
+
+ 
+   chart.yAxis
+       .axisLabel('Activity')
+       .tickFormat(d3.format('d'));
+ 
+   d3.select('#chart svg')
+       .datum(fakeActivityByDate())
+     .transition().duration(500)
+       .call(chart);
+ 
+   nv.utils.windowResize(function() { d3.select('#chart svg').call(chart) });
+ 
+   return chart;
+ });
+
+function days(num) {
+  return num*60*60*1000*24
+}
+ /**************************************
+  * Simple test data generator
+  */
+
+function fakeActivityByDate() {
+   var lineData = [];
+   var y=0;
+   var start_date = new Date() - days(365); // one year ago
+
+   for (var i = 0; i < 100; i++) {
+     lineData.push({x: new Date(start_date + days(i)), y: y});
+     y=y+Math.floor((Math.random()*10)-3);
+   }
+
+   return [
+     {
+       values: lineData,
+       key: 'Activity',
+       color: '#ff7f0e'
+     }
+   ];
+ }
+ 
+
+</script>
+
+ 
+
+  </body>
+</html>
+
